@@ -1,3 +1,5 @@
+[![apk_build](https://github.com/ployt0/Address_Matcher/actions/workflows/generate-apk-release.yml/badge.svg)](https://github.com/ployt0/Address_Matcher/actions/workflows/generate-apk-release.yml)
+
 Royal Mail owns the postcode database. I can get 99.99% of it from Land Registry sales. The postcodes are, apparently and as I recall, still copy righted.
 
 This app will allow someone to find the most prominent localities, referred to as "Locality 1", or L1, for the first one or two letters of a postcode. This is how the post is sorted at the highest level. I could add all the other localities (L2s), from the Land Registry (LR) data but for:

@@ -8,7 +8,7 @@ on:
         required: true
         default: "35.0.1"
 
-run-name: "BT: ${{ inputs.BUILD_TOOLS_VERSION }} on ${{ github.ref_name }} #${{ github.sha }}"
+run-name: "BT: ${{ inputs.BUILD_TOOLS_VERSION }}, #${{ github.sha }}"
 
 jobs:
   build:
