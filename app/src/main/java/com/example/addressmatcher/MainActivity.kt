@@ -47,22 +47,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 
-fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
-    when (val value = this[it]) {
-        is JSONArray -> {
-            val map = (0 until value.length()).associate {
-                Pair(it.toString(), value[it])
-            }
-            // We'd cast map to JSONObject(map).toMap() if recursing.
-            map.values.toList()
-        }
-        is JSONObject -> value.toMap()
-        JSONObject.NULL -> null
-        else            -> value
-    }
-}
-
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,7 +1,10 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    jacoco
 }
 
 android {
@@ -61,3 +64,44 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+fun fileTreeToList(fileT: FileTree): List<String> {
+    return fileT.mapNotNull{it.absolutePath}.toList();
+}
+
+tasks.withType<Test> {
+    testLogging {
+//        events "passed", "skipped", "failed"
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+        displayGranularity = 2
+        exceptionFormat = TestExceptionFormat.FULL
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn(tasks.named("testDebugUnitTest"))
+    description = "Calcualate coverage"
+    sourceDirectories.from("${project.projectDir}/src/main/java")
+    classDirectories.setFrom(files("${project.projectDir}/build/tmp/kotlin-classes/debug"))
+}
+
+tasks.register<JavaExec>("parseJacocoExec") {
+    dependsOn(allprojects.map { it.tasks.named<JacocoReport>("jacocoTestReport") })//('')
+    description = "Convert Jacoco binary report to HTML and CSV for easier reading."
+    group = "Verification"
+    classpath = files("jacococli.jar")
+//    val argList = fileTreeToList(fileTree(mapOf("dir" to project.projectDir, "include" to listOf("build/jacoco/*.exec"))))
+    val argList = "${project.projectDir}/build/jacoco/testDebugUnitTest.exec"
+    // More specific "--classfiles" focus coverage on more testable sub-directories (packages):
+    args("report", argList, "--classfiles", "build/tmp/kotlin-classes/debug", "--sourcefiles", "src/main/java", "--html", "build/report", "--csv", "build/report.csv")
+    // Then archive and upload ${project.projectDir}\app\build\report or "${project.projectDir}/build/report"
+    // java -jar app/jacococli.jar report app/build/jacoco/testDebugUnitTest.exec --classfiles app/build/intermediates/javac/debug --sourcefiles app/src/main/java --html app/build/report --csv app/build/report2.csv
+    // java -jar app/jacococli.jar report app/build/jacoco/testDebugUnitTest.exec --classfiles app/build/tmp/kotlin-classes/debug --sourcefiles app/src/main/java --html app/build/report --csv app/build/report2.csv
+    doFirst {
+        // doFirst/doLast run in the "execution phase". We must assert only inside these blocks
+        // or face failure during the "configuration phase". This would break `gradlew tasks`.
+        assert(file("build/jacoco/testDebugUnitTest.exec").exists())
+    }
+}
+
+

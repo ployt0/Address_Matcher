@@ -4,8 +4,7 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class MainActivityTest {
-
+class HelpersTest {
     @Test
     fun toMap() {
         val sample1ToManyMap = "{\"S\" : [\"Chesterfield\", \"Sheffield\"], \"SE\" : [\"London\"]}"
