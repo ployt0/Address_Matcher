@@ -36,4 +36,8 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: Nexus 6
-          script: ./gradlew :app:connectedCheck
+          script: |
+            adb devices
+            adb shell getprop
+            ./gradlew :app:connectedDebugAndroidTest
+            killall -INT crashpad_handler || true
