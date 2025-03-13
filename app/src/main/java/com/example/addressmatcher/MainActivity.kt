@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -17,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,9 +34,16 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import com.example.addressmatcher.ui.theme.AddressMatcherTheme
@@ -52,58 +61,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val ocToL1s: Map<String, List<String>> = readJSONMapAsset("ocToL1s.json")
         val l1sToOCs: Map<String, List<String>> = readJSONMapAsset("l1sToOCs.json")
-        enableEdgeToEdge()
         setContent {
-            AddressMatcherTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    val vPadding = (innerPadding.calculateTopPadding() +
-                            innerPadding.calculateBottomPadding()) / 3
-                    Column {
-                        var resultText by remember { mutableStateOf("") }
-                        var typedLocality by remember { mutableStateOf("") }
-                        var typedOCArea by remember { mutableStateOf("") }
-
-                        AutoCompleteTextField(
-                            modifier = Modifier.padding(0.dp, vPadding),
-                            fieldLabel = "OC area",
-                            value = typedOCArea,
-                            onSuggestionSelected = {
-                                typedOCArea = it
-                                resultText = ocToL1s.getValue(it).toTypedArray()
-                                    .joinToString("\n")
-                                                   },
-                            suggestions = ocToL1s.keys.toList(),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next,
-                                capitalization = KeyboardCapitalization.Characters
-                            )
-                        )
-
-                        AutoCompleteTextField(
-                            modifier = Modifier.padding(0.dp, vPadding),
-                            fieldLabel = "L1",
-                            value = typedLocality,
-                            onSuggestionSelected = {
-                                typedLocality = it
-                                resultText = l1sToOCs.getValue(it).toTypedArray()
-                                    .joinToString("\n")
-                                                   },
-                            suggestions = l1sToOCs.keys.toList(),
-                        )
-
-                        TextField(
-                            label = { Text("Result")},
-                            readOnly = true,
-                            placeholder = {Text("result")},
-                            value = resultText,
-                            onValueChange = { resultText = it },
-                            modifier = Modifier.padding(0.dp, vPadding)
-                        )
-                    }
-                }
-            }
+            MainContent(ocToL1s, l1sToOCs)
         }
     }
 
@@ -120,101 +79,85 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AutoCompleteTextField(
-    modifier: Modifier = Modifier,
-    fieldLabel: String,
-    fieldError: String? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(
-        imeAction = ImeAction.Next,
-        capitalization = KeyboardCapitalization.Words
-    ),
-    onSuggestionSelected: (selectedSuggestion: String) -> Unit,
-    suggestions: List<String>,
-    value: String,
+fun MainContent(
+    ocToL1s: Map<String, List<String>>,
+    l1sToOCs: Map<String, List<String>>
 ) {
-    val context = LocalContext.current
-    var text by remember { mutableStateOf(value) }
-    var isDropdownExpanded by remember { mutableStateOf(false) }
-    var filteredSuggestions by remember { mutableStateOf(emptyList<String>()) }
-    var debounceJob by remember { mutableStateOf<Job?>(null) }
-
-    LaunchedEffect(text) {
-        debounceJob?.cancel()
-        debounceJob = launch {
-            delay(500)
-            filteredSuggestions = suggestions.filter {
-                text.isNotEmpty() && it.contains(text, ignoreCase = false)
-            }
-        }
-    }
-
-    ExposedDropdownMenuBox(
-        modifier = modifier,
-        expanded = isDropdownExpanded,
-        onExpandedChange = { expanded ->
-            isDropdownExpanded = expanded
-        }
-    ) {
-        OutlinedTextField(
-            placeholder = { Text(fieldLabel) },
-            isError = !fieldError.isNullOrEmpty(),
-            keyboardOptions = keyboardOptions,
-            label = { Text(fieldLabel) },
-            maxLines = 1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged {
-                    if (!it.isFocused) {
-                        isDropdownExpanded = false
-                    }
-                }
-                .menuAnchor(),
-            onValueChange = {
-                text = it
-                isDropdownExpanded = it.isNotEmpty()
-            },
-            readOnly = false,
-            supportingText = {
-                if (!fieldError.isNullOrEmpty()) {
-                    Text(
-                        text = fieldError,
-                        color = Color.Red,
-                        style = TextStyle(fontSize = 12.sp)
-                    )
-                }
-            },
-            trailingIcon = {
-                if (!fieldError.isNullOrEmpty()) {
-                    Icon(Icons.Filled.Warning, contentDescription = "Error", tint = Color.Red)
-                }
-            },
-            value = text
-        )
-
-        if (filteredSuggestions.isNotEmpty()) {
-            DropdownMenu(
-                modifier = Modifier.exposedDropdownSize(),
-                expanded = isDropdownExpanded,
-                onDismissRequest = {
-                    isDropdownExpanded = false
-                },
-                properties = PopupProperties(focusable = false)
-            ) {
-                filteredSuggestions.forEach { suggestion ->
-                    DropdownMenuItem(
-                        text = { Text(suggestion) },
-                        onClick = {
-                            onSuggestionSelected(suggestion)
-                            text = suggestion
-                            isDropdownExpanded = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                    )
-                }
-            }
+    AddressMatcherTheme {
+        Scaffold(
+            modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
+            val vPadding = (innerPadding.calculateTopPadding() +
+                    innerPadding.calculateBottomPadding()) / 24
+            MainScreen(vPadding, ocToL1s, l1sToOCs)
         }
     }
 }
+
+@Composable
+private fun MainScreen(
+    vPadding: Dp,
+    ocToL1s: Map<String, List<String>>,
+    l1sToOCs: Map<String, List<String>>
+) {
+    var resultText by remember { mutableStateOf("") }
+    var typedLocality by remember { mutableStateOf("") }
+    var typedOCArea by remember { mutableStateOf("") }
+    LazyColumn {
+        item {
+            AutoCompleteTextField(
+                modifier = Modifier.padding(12.dp, vPadding),
+                fieldLabel = "OC area",
+                value = typedOCArea,
+                onSuggestionSelected = {
+                    typedOCArea = it
+                    resultText = ocToL1s.getValue(it).toTypedArray()
+                        .joinToString("\n")
+                },
+                suggestions = ocToL1s.keys.toList(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Characters
+                )
+            )
+        }
+        item {
+            AutoCompleteTextField(
+                modifier = Modifier.padding(12.dp, vPadding),
+                fieldLabel = "L1",
+                value = typedLocality,
+                onSuggestionSelected = {
+                    typedLocality = it
+                    resultText = l1sToOCs.getValue(it).toTypedArray()
+                        .joinToString("\n")
+                },
+                suggestions = l1sToOCs.keys.toList(),
+            )
+        }
+
+        item {
+            TextField (
+                label = { Text("Result") },
+                readOnly = true,
+                textStyle = TextStyle(fontSize = 24.sp),
+                placeholder = { Text("result") },
+                value = resultText,
+                onValueChange = { resultText = it },
+                modifier = Modifier.padding(12.dp, vPadding)
+            )
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun Preview() {
+    MainScreen(
+        16.dp,
+        mapOf<String, List<String>>("EX" to listOf("Exeter", "Exmouth"), "PO" to listOf("Portsmouth", "Southsea", "Havant", "Gosport", "Fareham", "Isle of Wight")),
+        mapOf<String, List<String>>("Exeter" to listOf("EX"), "Portsmouth" to listOf("PO")),
+    )
+}
+
