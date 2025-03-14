@@ -70,6 +70,8 @@ fun fileTreeToList(fileT: FileTree): List<String> {
 }
 
 tasks.withType<Test> {
+    // connectedAndroidTest output is still hidden unless we supply "-i" to gradlew. That's noisy.
+    // connected tests run on device and log to `logcat`, tagged `TestRunner`.
     testLogging {
 //        events "passed", "skipped", "failed"
         events("passed", "skipped", "failed", "standardOut", "standardError")
