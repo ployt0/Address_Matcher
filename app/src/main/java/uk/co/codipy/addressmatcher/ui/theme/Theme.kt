@@ -1,4 +1,4 @@
-package com.example.addressmatcher.ui.theme
+package uk.co.codipy.addressmatcher.ui.theme
 
 import android.app.Activity
 import android.os.Build

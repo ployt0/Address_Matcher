@@ -1,4 +1,4 @@
-package com.example.addressmatcher.ui.theme
+package uk.co.codipy.addressmatcher.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

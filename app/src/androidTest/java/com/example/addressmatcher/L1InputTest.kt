@@ -1,4 +1,4 @@
-package com.example.addressmatcher
+package uk.co.codipy.addressmatcher
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.unit.dp
-import com.example.addressmatcher.ui.theme.AddressMatcherTheme
+import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
 import org.junit.Rule
 import org.junit.Test
 

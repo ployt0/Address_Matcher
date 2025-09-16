@@ -1,4 +1,4 @@
-package com.example.addressmatcher
+package uk.co.codipy.addressmatcher
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.addressmatcher", appContext.packageName)
+        assertEquals("uk.co.codipy.addressmatcher", appContext.packageName)
     }
 }

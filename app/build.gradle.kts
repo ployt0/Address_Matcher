@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.addressmatcher"
+    namespace = "uk.co.codipy.addressmatcher"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.addressmatcher"
+        applicationId = "uk.co.codipy.addressmatcher"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

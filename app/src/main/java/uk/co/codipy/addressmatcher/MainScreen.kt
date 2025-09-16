@@ -1,4 +1,4 @@
-package com.example.addressmatcher
+package uk.co.codipy.addressmatcher
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn

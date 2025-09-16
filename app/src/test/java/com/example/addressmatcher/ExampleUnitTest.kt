@@ -1,4 +1,4 @@
-package com.example.addressmatcher
+package uk.co.codipy.addressmatcher
 
 import org.junit.Test
 

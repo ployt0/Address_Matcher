@@ -1,4 +1,4 @@
-package com.example.addressmatcher
+package uk.co.codipy.addressmatcher
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
-import com.example.addressmatcher.ui.theme.AddressMatcherTheme
+import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

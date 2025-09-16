@@ -1,4 +1,4 @@
-package com.example.addressmatcher
+package uk.co.codipy.addressmatcher
 
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
