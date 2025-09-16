@@ -11,6 +11,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,4 +53,18 @@ fun L1ToOCScreen(
                 .fillMaxWidth()
         )
     }
+}
+
+
+@Preview
+@Composable
+fun PreviewL1ToOCScreen() {
+    L1ToOCScreen(
+        16.dp,
+        typedLocality = "Por",
+        onTypedLocalityChange = { it },
+        resultText = "placeholder",
+        onResultChange = { it },
+        l1sToOCs = mapOf<String, List<String>>("Exeter" to listOf("EX"), "Portsmouth" to listOf("PO")),
+    )
 }

@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uk.co.codipy.addressmatcher.AutoCompleteTextField
+import uk.co.codipy.addressmatcher.MainScreen
 
 
 @Composable
@@ -35,7 +37,7 @@ fun OCToL1Screen(
 
         AutoCompleteTextField(
             modifier = Modifier.padding(top = vPadding),
-            fieldLabel = "OC Area",
+            fieldLabel = "OC area",
             value = typedOCArea,
             onSuggestionSelected = {
                 onTypedOCAreaChange(it)
@@ -59,4 +61,18 @@ fun OCToL1Screen(
                 .fillMaxWidth()
         )
     }
+}
+
+
+@Preview
+@Composable
+fun PreviewOCToL1Screen() {
+    OCToL1Screen(
+        16.dp,
+        typedOCArea = "EX",
+        onTypedOCAreaChange = { it },
+        resultText = "placeholder",
+        onResultChange = { it },
+        ocToL1s = mapOf<String, List<String>>("EX" to listOf("Exeter", "Exmouth"), "PO" to listOf("Portsmouth", "Southsea", "Havant", "Gosport", "Fareham", "Isle of Wight")),
+    )
 }
