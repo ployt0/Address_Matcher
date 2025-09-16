@@ -9,28 +9,26 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-<<<<<<< Updated upstream
 import androidx.compose.ui.unit.dp
 import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
 import org.junit.Rule
 import org.junit.Test
-=======
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
-import androidx.compose.ui.unit.dp
-import org.junit.Rule
-import org.junit.Test
-import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
->>>>>>> Stashed changes
 
-val ocToL1s: Map<String, List<String>> = mapOf<String, List<String>>(
+
+private fun swipeToL1Page(rule: androidx.compose.ui.test.junit4.ComposeTestRule) {
+    rule.onNodeWithTag("MainPager").performTouchInput { swipeLeft() }
+}
+
+private val ocToL1s: Map<String, List<String>> = mapOf<String, List<String>>(
     "EX" to listOf("Exeter", "Exmouth"),
     "PO" to listOf(
         "Portsmouth",
         "Isle of Wight"
     )
 )
-val l1sToOCs: Map<String, List<String>> = mapOf<String, List<String>>(
+private val l1sToOCs: Map<String, List<String>> = mapOf<String, List<String>>(
     "Exeter" to listOf("EX"),
     "Portsmouth" to listOf("PO")
 )
@@ -43,47 +41,43 @@ class L1InputTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun testL1AutocompleteSuggests() {
+    fun testOCAutocompleteSuggests() {
         composeTestRule.setContent {
             AddressMatcherTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }
+        swipeToL1Page(composeTestRule)
 
-        composeTestRule.onNodeWithText("OC area").performClick()
-        composeTestRule.onNodeWithText("EX").assertIsNotDisplayed()
-        composeTestRule.onNodeWithText("OC area").performTextInput("X")
+        composeTestRule.onNodeWithText("L1").performClick()
+        composeTestRule.onNodeWithText("Portsmouth").assertIsNotDisplayed()
+        composeTestRule.onNodeWithText("L1").performTextInput("Por")
+        composeTestRule.waitForIdle()
         // Waiting 1000ms is ample.
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("EX").isDisplayed() }
-        composeTestRule.onNodeWithText("EX").assertIsDisplayed()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
+        composeTestRule.onNodeWithText("Portsmouth").assertIsDisplayed()
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun testL1AutocompleteClickResults() {
+    fun testOCAutocompleteClickResults() {
         composeTestRule.setContent {
             AddressMatcherTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }
+        swipeToL1Page(composeTestRule)
 
-<<<<<<< Updated upstream
-        composeTestRule.onNodeWithText("OC area").performClick()
-        composeTestRule.onNodeWithText("OC area").performTextInput("X")
-        composeTestRule.onNodeWithText("Result").assertIsDisplayed()
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("EX").isDisplayed() }
-=======
         composeTestRule.onNodeWithText("L1").performClick()
         composeTestRule.onNodeWithText("L1").performTextInput("Por")
         composeTestRule.onNodeWithText("OCs").assertIsDisplayed()
         composeTestRule.waitUntil { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
->>>>>>> Stashed changes
 
         // This is the result we will want to seek displayed for us shortly:
-        composeTestRule.onNodeWithText("Exeter\nExmouth").assertIsNotDisplayed()
-        composeTestRule.onNodeWithText("EX").performClick()
+        composeTestRule.onNodeWithText("PO").assertIsNotDisplayed()
+        composeTestRule.onNodeWithText("Portsmouth").performClick()
 
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Exeter\nExmouth").isDisplayed() }
-        composeTestRule.onNodeWithText("Exeter\nExmouth").assertIsDisplayed()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithText("PO").isDisplayed() }
+        composeTestRule.onNodeWithText("PO").assertIsDisplayed()
     }
 }
