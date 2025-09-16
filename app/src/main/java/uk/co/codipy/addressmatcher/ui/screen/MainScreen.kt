@@ -1,4 +1,4 @@
-package uk.co.codipy.addressmatcher
+package uk.co.codipy.addressmatcher.ui.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -13,8 +13,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import uk.co.codipy.addressmatcher.ui.screen.L1ToOCScreen
-import uk.co.codipy.addressmatcher.ui.screen.OCToL1Screen
 
 
 @Composable

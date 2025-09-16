@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -28,6 +29,8 @@ fun OCToL1Screen(
     onResultChange: (String) -> Unit,
     ocToL1s: Map<String, List<String>>
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 16.dp)) {
@@ -39,6 +42,7 @@ fun OCToL1Screen(
             onSuggestionSelected = {
                 onTypedOCAreaChange(it)
                 onResultChange(ocToL1s[it]?.joinToString("\n") ?: "No results")
+                keyboardController?.hide()
             },
             suggestions = ocToL1s.keys.toList(),
             keyboardOptions = KeyboardOptions(

@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.unit.dp
 import org.junit.Rule
 import org.junit.Test
+import uk.co.codipy.addressmatcher.ui.screen.MainScreen
 import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
 
 

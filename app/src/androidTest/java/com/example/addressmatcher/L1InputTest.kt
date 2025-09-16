@@ -15,6 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
+import uk.co.codipy.addressmatcher.ui.screen.MainScreen
 
 
 private fun swipeToL1Page(rule: androidx.compose.ui.test.junit4.ComposeTestRule) {
