@@ -14,13 +14,11 @@ import org.junit.Rule
 import org.junit.Test
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 
-private fun swipeToL1Page(rule: androidx.compose.ui.test.junit4.ComposeTestRule) {
-    rule.onNodeWithTag("MainPager").performTouchInput { swipeLeft() }
-}
 
 private val ocToL1s: Map<String, List<String>> = mapOf<String, List<String>>(
     "EX" to listOf("Exeter", "Exmouth"),
@@ -34,7 +32,7 @@ private val l1sToOCs: Map<String, List<String>> = mapOf<String, List<String>>(
     "Portsmouth" to listOf("PO")
 )
 
-class L1InputTest {
+class OCInputTest {
 
     @get:Rule val composeTestRule = createComposeRule()
     // use createAndroidComposeRule<YourActivity>() if you need access to
@@ -48,15 +46,13 @@ class L1InputTest {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }
-        swipeToL1Page(composeTestRule)
 
-        composeTestRule.onNodeWithText("L1").performClick()
-        composeTestRule.onNodeWithText("Portsmouth").assertIsNotDisplayed()
-        composeTestRule.onNodeWithText("L1").performTextInput("Por")
-        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("OC area").performClick()
+        composeTestRule.onNodeWithText("EX").assertIsNotDisplayed()
+        composeTestRule.onNodeWithText("OC area").performTextInput("X")
         // Waiting 1000ms is ample.
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
-        composeTestRule.onNodeWithText("Portsmouth").assertIsDisplayed()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithText("EX").isDisplayed() }
+        composeTestRule.onNodeWithText("EX").assertIsDisplayed()
     }
 
     @OptIn(ExperimentalTestApi::class)
@@ -67,18 +63,17 @@ class L1InputTest {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }
-        swipeToL1Page(composeTestRule)
 
-        composeTestRule.onNodeWithText("L1").performClick()
-        composeTestRule.onNodeWithText("L1").performTextInput("Por")
+        composeTestRule.onNodeWithText("OC area").performClick()
+        composeTestRule.onNodeWithText("OC area").performTextInput("X")
         composeTestRule.onNodeWithText("Result").assertIsDisplayed()
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
+        composeTestRule.waitUntil { composeTestRule.onNodeWithText("EX").isDisplayed() }
 
         // This is the result we will want to seek displayed for us shortly:
-        composeTestRule.onNodeWithText("PO").assertIsNotDisplayed()
-        composeTestRule.onNodeWithText("Portsmouth").performClick()
+        composeTestRule.onNodeWithText("Exeter\nExmouth").assertIsNotDisplayed()
+        composeTestRule.onNodeWithText("EX").performClick()
 
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("PO").isDisplayed() }
-        composeTestRule.onNodeWithText("PO").assertIsDisplayed()
+        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Exeter\nExmouth").isDisplayed() }
+        composeTestRule.onNodeWithText("Exeter\nExmouth").assertIsDisplayed()
     }
 }
