@@ -1,18 +1,18 @@
-package uk.co.codipy.addressmatcher
+package uk.co.codipy.addressmatcher.ui.widget
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,15 +23,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import uk.co.codipy.addressmatcher.R
+import uk.co.codipy.addressmatcher.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +50,6 @@ fun AutoCompleteTextField(
     suggestions: List<String>,
     value: String,
 ) {
-//    val context = LocalContext.current
     var text by remember { mutableStateOf(value) }
     var isDropdownExpanded by remember { mutableStateOf(false) }
     var filteredSuggestions by remember { mutableStateOf(emptyList<String>()) }
@@ -86,7 +88,7 @@ fun AutoCompleteTextField(
                         isDropdownExpanded = false
                     }
                 }
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
             ,
             onValueChange = {
                 text = it
@@ -104,7 +106,11 @@ fun AutoCompleteTextField(
             },
             trailingIcon = {
                 if (!fieldError.isNullOrEmpty()) {
-                    Icon(Icons.Filled.Warning, contentDescription = "Error", tint = Color.Red)
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_warning_24),
+                        contentDescription = "Error",
+                        tint = MaterialTheme.colorScheme.error
+                    )
                 }
             },
             value = text
@@ -130,6 +136,25 @@ fun AutoCompleteTextField(
                         contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                     )
                 }
+            }
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun GreetingPreview() {
+    AppTheme(darkTheme = false) {
+        Surface {
+            Column {
+                AutoCompleteTextField(
+                    value = "RG",
+                    onSuggestionSelected = {},
+                    fieldLabel = "Test here",
+                    suggestions = listOf<String>("ABC", "123")
+                )
+                Text(text = "Space here")
             }
         }
     }

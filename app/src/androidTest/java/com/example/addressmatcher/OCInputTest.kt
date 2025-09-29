@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import org.junit.Rule
 import org.junit.Test
 import uk.co.codipy.addressmatcher.ui.screen.MainScreen
-import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
+import uk.co.codipy.addressmatcher.ui.theme.AppTheme
 
 
 private val ocToL1s: Map<String, List<String>> = mapOf<String, List<String>>(
@@ -37,7 +37,7 @@ class OCInputTest {
     @Test
     fun testOCAutocompleteSuggests() {
         composeTestRule.setContent {
-            AddressMatcherTheme {
+            AppTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }
@@ -54,7 +54,7 @@ class OCInputTest {
     @Test
     fun testOCAutocompleteClickResults() {
         composeTestRule.setContent {
-            AddressMatcherTheme {
+            AppTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }

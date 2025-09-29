@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.unit.dp
-import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
+import uk.co.codipy.addressmatcher.ui.theme.AppTheme
 import org.junit.Rule
 import org.junit.Test
 import androidx.compose.ui.test.performTouchInput
@@ -44,7 +44,7 @@ class L1InputTest {
     @Test
     fun testOCAutocompleteSuggests() {
         composeTestRule.setContent {
-            AddressMatcherTheme {
+            AppTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }
@@ -63,7 +63,7 @@ class L1InputTest {
     @Test
     fun testOCAutocompleteClickResults() {
         composeTestRule.setContent {
-            AddressMatcherTheme {
+            AppTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
             }
         }

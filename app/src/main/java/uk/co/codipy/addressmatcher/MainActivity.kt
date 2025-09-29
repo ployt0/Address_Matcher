@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import uk.co.codipy.addressmatcher.ui.theme.AddressMatcherTheme
+import uk.co.codipy.addressmatcher.ui.theme.AppTheme
 import org.json.JSONObject
 import uk.co.codipy.addressmatcher.ui.screen.MainScreen
 import java.io.BufferedReader
@@ -42,7 +42,7 @@ fun MainContent(
     ocToL1s: Map<String, List<String>>,
     l1sToOCs: Map<String, List<String>>
 ) {
-    AddressMatcherTheme {
+    AppTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize()
         ) { innerPadding ->
