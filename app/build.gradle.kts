@@ -22,7 +22,10 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+        }
+        getByName("release") {
             // Without minify is 16242 KB!
             isMinifyEnabled = true
             // With shrink is 1708 KB, without is 2052 KB.
@@ -33,6 +36,9 @@ android {
             )
         }
     }
+
+    testBuildType = "debug" // run connected tests against debug
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
