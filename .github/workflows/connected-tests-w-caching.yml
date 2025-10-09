@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        api-level: [36]  # 28, 32, 36
+        api-level: [35]  # 28, 32, 35
         target: [default]  # , google_apis
     steps:
       - name: checkout
