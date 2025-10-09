@@ -6,7 +6,7 @@ on:
       BUILD_TOOLS_VERSION:
         description: Android build tools version
         required: true
-        default: "35.0.1"
+        default: "36.1.0"
 
 run-name: "BT: ${{ inputs.BUILD_TOOLS_VERSION }}, #${{ github.sha }}"
 
