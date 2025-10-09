@@ -58,7 +58,14 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew :app:connectedDebugAndroidTest
+          script: |
+            adb devices
+            adb shell getprop
+            adb logcat *:S TestRunner:V -T 1 & LOGCAT_PID=$!
+            ./gradlew :app:connectedDebugAndroidTest
+            if [ -n "$LOGCAT_PID" ] ; then kill $LOGCAT_PID; fi
+            killall -INT crashpad_handler || true
+
 
       - name: Upload test reports as artifacts
         if: always()
