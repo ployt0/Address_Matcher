@@ -42,7 +42,7 @@ class L1InputTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun testOCAutocompleteSuggests() {
+    fun testL1AutocompleteSuggests() {
         composeTestRule.setContent {
             AppTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)
@@ -61,7 +61,7 @@ class L1InputTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun testOCAutocompleteClickResults() {
+    fun testL1AutocompleteClickResults() {
         composeTestRule.setContent {
             AppTheme {
                 MainScreen(16.dp, ocToL1s, l1sToOCs)

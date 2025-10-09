@@ -60,7 +60,17 @@ jobs:
           disable-animations: true
           script: ./gradlew :app:connectedDebugAndroidTest
 
+      - name: Upload test reports as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-test-reports
+          path: app/build/reports/androidTests/connected/debug/
 
+      - name: Capture adb logcat on failure
+        if: failure()  # This runs only if any previous step fails
+        run: |
+          adb logcat -d > /home/runner/work/Address_Matcher/logcat.log
+          cat /home/runner/work/Address_Matcher/logcat.log
 
 #      - name: use emulator
 #        uses: reactivecircus/android-emulator-runner@v2
