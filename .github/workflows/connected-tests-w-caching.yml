@@ -66,13 +66,13 @@ jobs:
           name: android-test-reports
           path: app/build/reports/androidTests/connected/debug/
 
-      - name: Capture adb logcat on failure
-        if: failure()  # This runs only if any previous step fails
-        run: |
-          adb logcat > /home/runner/work/Address_Matcher/logcat.log &
-          sleep 15  # Wait for some logs to accumulate
-          cat /home/runner/work/Address_Matcher/logcat.log
-          kill %1  # Kill the adb logcat process after capturing some logs
+#      - name: Capture adb logcat on failure
+#        if: failure()  # This runs only if any previous step fails
+#        run: |
+#          adb logcat > /home/runner/work/Address_Matcher/logcat.log &
+#          sleep 15  # Wait for some logs to accumulate
+#          cat /home/runner/work/Address_Matcher/logcat.log
+#          kill %1  # Kill the adb logcat process after capturing some logs
 
 #      - name: use emulator
 #        uses: reactivecircus/android-emulator-runner@v2
