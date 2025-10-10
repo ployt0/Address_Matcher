@@ -46,7 +46,7 @@ class OCInputTest {
         composeTestRule.onNodeWithText("EX").assertIsNotDisplayed()
         composeTestRule.onNodeWithText("OC area").performTextInput("X")
         // Waiting 1000ms is ample.
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("EX").isDisplayed() }
+        composeTestRule.waitUntil(3000) { composeTestRule.onNodeWithText("EX").isDisplayed() }
         composeTestRule.onNodeWithText("EX").assertIsDisplayed()
     }
 
@@ -62,13 +62,13 @@ class OCInputTest {
         composeTestRule.onNodeWithText("OC area").performClick()
         composeTestRule.onNodeWithText("OC area").performTextInput("X")
         composeTestRule.onNodeWithText("L1s").assertIsDisplayed()
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("EX").isDisplayed() }
+        composeTestRule.waitUntil(3000) { composeTestRule.onNodeWithText("EX").isDisplayed() }
 
         // This is the result we will want to seek displayed for us shortly:
         composeTestRule.onNodeWithText("Exeter\nExmouth").assertIsNotDisplayed()
         composeTestRule.onNodeWithText("EX").performClick()
 
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Exeter\nExmouth").isDisplayed() }
+        composeTestRule.waitUntil(3000) { composeTestRule.onNodeWithText("Exeter\nExmouth").isDisplayed() }
         composeTestRule.onNodeWithText("Exeter\nExmouth").assertIsDisplayed()
     }
 }

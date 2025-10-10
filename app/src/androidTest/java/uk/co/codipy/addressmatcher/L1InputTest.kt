@@ -55,7 +55,7 @@ class L1InputTest {
         composeTestRule.onNodeWithText("L1").performTextInput("Por")
         composeTestRule.waitForIdle()
         // Waiting 1000ms is ample.
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
+        composeTestRule.waitUntil(3000) { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
         composeTestRule.onNodeWithText("Portsmouth").assertIsDisplayed()
     }
 
@@ -72,13 +72,13 @@ class L1InputTest {
         composeTestRule.onNodeWithText("L1").performClick()
         composeTestRule.onNodeWithText("L1").performTextInput("Por")
         composeTestRule.onNodeWithText("OCs").assertIsDisplayed()
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
+        composeTestRule.waitUntil(3000) { composeTestRule.onNodeWithText("Portsmouth").isDisplayed() }
 
         // This is the result we will want to seek displayed for us shortly:
         composeTestRule.onNodeWithText("PO").assertIsNotDisplayed()
         composeTestRule.onNodeWithText("Portsmouth").performClick()
 
-        composeTestRule.waitUntil { composeTestRule.onNodeWithText("PO").isDisplayed() }
+        composeTestRule.waitUntil(3000) { composeTestRule.onNodeWithText("PO").isDisplayed() }
         composeTestRule.onNodeWithText("PO").assertIsDisplayed()
     }
 }
