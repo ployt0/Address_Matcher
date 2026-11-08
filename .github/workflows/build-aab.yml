@@ -1,0 +1,64 @@
+name: Build AAB release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set environment variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run gradle tests
+        run: ./gradlew test
+
+      # Build the unsigned AAB bundle
+      - name: Build release AAB
+        run: ./gradlew :app:bundleRelease
+
+      # Sign the AAB with jarsigner
+      - name: Sign AAB
+        run: |
+          # Decode keystore
+          echo "${{ secrets.SIGNING_KEY }}" | base64 -di > my.jks
+          
+          # Extract alias automatically from the keystore if KEY_ALIAS secret is not set
+          ALIAS="${{ secrets.KEY_ALIAS }}"
+          if [ -z "$ALIAS" ]; then
+            ALIAS=$(keytool -list -keystore my.jks -storepass "${{ secrets.KEY_STORE_PASSWORD }}" | grep -E "PrivateKeyEntry|trustedCertEntry" | cut -d',' -f1 | head -n 1)
+          fi
+          echo "Signing with alias: $ALIAS"
+          
+          # Sign using jarsigner (apksigner/zipalign do not apply to AAB)
+          jarsigner -keystore my.jks \
+            -storepass "${{ secrets.KEY_STORE_PASSWORD }}" \
+            -keypass "${{ secrets.KEY_STORE_PASSWORD }}" \
+            app/build/outputs/bundle/release/app-release.aab \
+            "$ALIAS"
+          
+          # Verify signature
+          jarsigner -verify -verbose -certs app/build/outputs/bundle/release/app-release.aab
+          
+          # Rename to target file
+          cp app/build/outputs/bundle/release/app-release.aab "${{ env.REPO_NAME }}.aab"
+
+      - name: Archive signed AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-aab
+          path: ${{ env.REPO_NAME }}.aab
