@@ -2,21 +2,20 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     jacoco
 }
 
 android {
     namespace = "uk.co.codipy.addressmatcher"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "uk.co.codipy.addressmatcher"
         minSdk = 28
-        targetSdk = 35
-        versionCode = 3
-        versionName = "0.1.1"
+        targetSdk = 37
+        versionCode = 6
+        versionName = "0.1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -42,9 +41,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
